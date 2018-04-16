@@ -1,0 +1,37 @@
+mixin storeFrom(store = {})
+    form(action=`/add/${store._id || ''}` method="POST" class="card")
+        
+        label(for="name") Name
+        input(type="text", name="name" value=store.name)
+
+        label(for="description") Description
+        textarea(name="description") #{store.description}
+
+        //- Address
+        label(for="address") Address
+        input(type="text" id="address" name="location[address]" value=(store.location && store.location.address))
+
+        label(for="lng") Address Lng
+        input(type="text" id="lng" name="location[coordinates][0]")
+
+        label(for="lat") Address Lat
+        input(type="text" id="lat" name="location[coordinates][1]")
+
+        br
+        br
+
+        //- Tags
+        - const choices = ['Wifi', 'Open Late', 'Family Friendly', 'Vegatarian', 'Licensed']
+        - const tags = store.tags || []
+        //- Tags
+        ul.tags
+            each choice in choices
+                .tag.tag__choice
+                    
+                    - choiceInLowerCase = h.slug(choice).toLowerCase()
+
+                    input(type="checkbox", name="tags" value=choice id=choiceInLowerCase checked=(tags.includes(choice)))
+                    label(for=choiceInLowerCase) #{choice}
+        input(type="submit" class="button" value="save ►")
+
+
